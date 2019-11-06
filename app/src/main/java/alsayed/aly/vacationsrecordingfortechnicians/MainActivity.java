@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button addrecord;
     Button allrecords;
     TextView oldn;
-    boolean showDialog=true;
+    static boolean showDialog=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +65,23 @@ public class MainActivity extends AppCompatActivity {
         Calendar calendar=Calendar.getInstance();
         int c_Year = calendar.get(Calendar.YEAR);
         int r_year=Integer.parseInt(new DBHelper(this).recordYear());
-        if (c_Year!=r_year){notifyNewYear();}
+        Toast.makeText(this,r_year+"",Toast.LENGTH_SHORT).show();
+        if (c_Year!=r_year){detectNewYear();}
     }
 
-    private void notifyNewYear() {
+    private void detectNewYear() {
+        new DBHelper(this).insertToOld();
         new AlertDialog.Builder(this)
                 .setTitle(" السنة الجديدة "  )
-                .setMessage( "سيتم تنظيف السجلات بحلول السنة الجديدة أوتوماتيكياََ ؟")
-                .setNegativeButton("Ok", null)
+                .setMessage( "تم الآن تنظيف السجلات بمناسبة حلول السنة الجديدة ")
+                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showDialog=false;
+                    }
+                })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
-        //Toast.makeText(this,"باقي علس السنة الجديدة عدد "+(31-day)+" يوم",Toast.LENGTH_SHORT).show();
     }
 
     public void openAddActivity(){

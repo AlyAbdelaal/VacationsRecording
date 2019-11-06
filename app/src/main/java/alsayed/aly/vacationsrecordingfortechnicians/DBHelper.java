@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
@@ -180,19 +181,35 @@ public class DBHelper extends SQLiteOpenHelper {
         }else{return false;}
 
     }
-    public boolean insertToOld (Context context){
+    public boolean insertToOld (){
+
+        //Cursor data = db.rawQuery("SELECT * FROM o_vacation",null);
         SQLiteDatabase db=this.getWritableDatabase();
-        db.execSQL("INSERT INTO o_vacations SELECT * FROM vacations");
-        db.execSQL("DELETE FROM vacations");
-        Toast.makeText(context,"data sent",Toast.LENGTH_SHORT).show();
+        try{
+            db.execSQL("INSERT INTO o_vacations SELECT * FROM vacations");
+            db.execSQL("DELETE FROM vacations");
+        }catch (SQLiteException e){
+            db.execSQL("create table o_vacations (id integer primary key ,name text ,vacation text,date text,MONTH text)");
+            db.execSQL("INSERT INTO o_vacations SELECT * FROM vacations");
+            db.execSQL("DELETE FROM vacations");
+        }
+
         return true;
     }
     public String recordYear(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor c=db.rawQuery("SELECT DATE FROM vacations LIMIT 1",null);
-        String rd =c.getString(0);
-        String r =rd.substring(rd.length()-4);
-        return r;
+        Cursor data=db.rawQuery("SELECT DATE FROM vacations LIMIT 1",null);
+        ArrayList<String> rda=new ArrayList<String>();
+        while (data.moveToNext() ) {
+            rda.add(data.getString(0));
+        }
+
+        if(data.getCount()==1){
+            String rd =rda.get(0);
+            String r =rd.substring(rd.length()-4);
+
+            return r;
+        }else{return "0";}
     }
 
 
