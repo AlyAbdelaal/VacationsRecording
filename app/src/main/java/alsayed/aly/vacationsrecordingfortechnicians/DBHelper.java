@@ -32,7 +32,9 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL("create table vacations (id integer primary key AUTOINCREMENT,name text ,vacation text,date text,MONTH text)");
+        db.execSQL("create table o_vacations (id integer primary key ,name text ,vacation text,date text,MONTH text)");
         db.execSQL("create table settings (vid integer primary key AUTOINCREMENT,vname text)");
+
         db.execSQL("INSERT INTO settings (vname) VALUES ('أعتيادي'),('عارضة'),('بدل راحة'),('إعتذار عن يوم'),('إعتذار عن الوقت الإضافي'),('إعتذار سفن'),('إذن شخصي'),('إذن تأخير'),('مرضي'),('مأمورية رسمية'),('مأمورية عيادة')");
     }
 
@@ -177,6 +179,20 @@ public class DBHelper extends SQLiteOpenHelper {
 
         }else{return false;}
 
+    }
+    public boolean insertToOld (Context context){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("INSERT INTO o_vacations SELECT * FROM vacations");
+        db.execSQL("DELETE FROM vacations");
+        Toast.makeText(context,"data sent",Toast.LENGTH_SHORT).show();
+        return true;
+    }
+    public String recordYear(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c=db.rawQuery("SELECT DATE FROM vacations LIMIT 1",null);
+        String rd =c.getString(0);
+        String r =rd.substring(rd.length()-4);
+        return r;
     }
 
 

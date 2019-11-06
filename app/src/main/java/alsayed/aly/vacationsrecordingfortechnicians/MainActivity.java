@@ -1,8 +1,10 @@
 package alsayed.aly.vacationsrecordingfortechnicians;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,6 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Calendar;
 
 import hotchemi.android.rate.AppRate;
 
@@ -20,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     Button addrecord;
     Button allrecords;
     TextView oldn;
+    boolean showDialog=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +61,23 @@ public class MainActivity extends AppCompatActivity {
                 opennamsActivity();
             }
         });
+
+        Calendar calendar=Calendar.getInstance();
+        int c_Year = calendar.get(Calendar.YEAR);
+        int r_year=Integer.parseInt(new DBHelper(this).recordYear());
+        if (c_Year!=r_year){notifyNewYear();}
     }
+
+    private void notifyNewYear() {
+        new AlertDialog.Builder(this)
+                .setTitle(" السنة الجديدة "  )
+                .setMessage( "سيتم تنظيف السجلات بحلول السنة الجديدة أوتوماتيكياََ ؟")
+                .setNegativeButton("Ok", null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+        //Toast.makeText(this,"باقي علس السنة الجديدة عدد "+(31-day)+" يوم",Toast.LENGTH_SHORT).show();
+    }
+
     public void openAddActivity(){
         Intent intent=new Intent(this,add.class);
         startActivity(intent);
@@ -86,4 +108,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }
