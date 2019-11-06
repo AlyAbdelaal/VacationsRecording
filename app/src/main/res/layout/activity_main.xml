@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@color/selectedBg"
+    android:weightSum="100">
+
+    <Button
+        android:id="@+id/addrecord"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20pt"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="20pt"
+        android:background="@drawable/button_background"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="10"
+        android:shadowDy="5"
+        android:shadowRadius="15"
+        android:text=" إضافة تسجيل جديد"
+        android:textColor="#FFFFFF"
+
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/allreport"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="50"
+        android:layout_below="@+id/addrecord"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20pt"
+        android:layout_marginRight="20pt"
+        android:layout_marginBottom="100dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_background"
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="10"
+        android:shadowDy="5"
+
+        android:shadowRadius="15"
+        android:text="تقرير"
+        android:textColor="#FFFFFF"
+        android:textSize="30sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="قائمة الأسماء المسجلة"
+        android:textSize="10pt"
+        android:textColor="@color/blue"
+        android:background="@color/gray"
+        android:layout_margin="10dp"
+        android:shadowColor="@color/blue"
+        android:shadowDx="20"
+        android:shadowDy="20"
+        android:id="@+id/reNams"/>
+
+</LinearLayout>

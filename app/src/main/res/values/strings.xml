@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Vacations Recording</string>
+
+    <string-array name="vacations">
+        <item>إختر</item>
+        <item>أعتيادي</item>
+        <item>عارضة</item>
+        <item>بدل راحة</item>
+        <item>إعتذار عن يوم</item>
+        <item>إعتذار عن الوقت الإضافي</item>
+        <item>إعتذار سفن</item>
+        <item>إذن شخصي</item>
+        <item>إذن تأخير</item>
+        <item>مرضي</item>
+        <item>مأمورية رسمية</item>
+        <item>مأمورية عيادة</item>
+    </string-array>
+    <string-array name="months">
+        <item>إختر</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+</resources>
