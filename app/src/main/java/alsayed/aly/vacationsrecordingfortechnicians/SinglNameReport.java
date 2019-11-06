@@ -292,5 +292,6 @@ public class SinglNameReport extends AppCompatActivity {
     }
 
 
-
+    public void balance(View view) {
+    }
 }
