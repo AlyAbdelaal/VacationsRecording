@@ -37,6 +37,7 @@ public class SinglNameReport extends AppCompatActivity {
     Button searchButton,excelf;
     public TextView sname;
     TextView count;
+    TextView balanceTextView;
 
     public static String ssnn = "ass";
     public static void setSsnn(String ssnn) {
@@ -63,6 +64,8 @@ public class SinglNameReport extends AppCompatActivity {
         //actionBar.setIcon(R.mipmap.ic_launcher_round);
         actionBar.setTitle("إجازاتك");
         //---------------------------------
+        balanceTextView=(TextView)findViewById(R.id.edit_balance);
+        
         count=(TextView)findViewById(R.id.edit_sum);
         listView21=(ListView)findViewById(R.id.listview21);
         shown();
@@ -293,5 +296,7 @@ public class SinglNameReport extends AppCompatActivity {
 
 
     public void balance(View view) {
+        BalanceInsertDialog balanceInsertDialog=new BalanceInsertDialog();
+        balanceInsertDialog.show(getSupportFragmentManager(),"bbb");
     }
 }

@@ -66,20 +66,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
     //----------update-----
-    public boolean updateBalance (int id,String p_name,int ordinary,int sudden)
+    public boolean updateBalance (String p_name,int ordinary,int sudden)
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
         contentValues.put("p_name",p_name);
         contentValues.put("ordinary",ordinary);
         contentValues.put("sudden",sudden);
-        db.update("vacations_balance",contentValues,"ID = ?",new String[]{Integer.toString(id)});
+        db.update("vacations_balance",contentValues,"p_name = ?",new String[]{p_name});
         return true;
     }
     //----------getBalance---
-    public Cursor getBalance(){
+    public Cursor getBalance(String p_name){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("SELECT * FROM vacations_balance",null);
+        Cursor data = ddbb.rawQuery("SELECT * FROM vacations_balance WHERE p_name = ? ",new String[]{p_name});
         return data;
     }
 
