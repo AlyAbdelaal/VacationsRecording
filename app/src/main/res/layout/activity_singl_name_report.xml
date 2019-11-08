@@ -82,6 +82,9 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textSize="9pt"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:onClick="refresh"
             />
 
         <ListView

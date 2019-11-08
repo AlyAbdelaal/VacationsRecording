@@ -34,21 +34,21 @@ import jxl.write.WritableWorkbook;
 
 public class SinglNameReport extends AppCompatActivity {
 
-    Button searchButton,excelf;
+    Button searchButton, excelf;
     public TextView sname;
     TextView count;
-    TextView balanceTextView;
+    static TextView balanceTextView;
 
     public static String ssnn = "ass";
+
     public static void setSsnn(String ssnn) {
         SinglNameReport.ssnn = ssnn;
     }
 
-    public static String smonth ,svacation ;
+    public static String smonth, svacation;
 
 
-
-    Spinner spinnerm ,monthd,vacationd;
+    Spinner spinnerm, monthd, vacationd;
     ListView listView21;
     DBHelper dbh2;
     ArrayList<myArray> vacList;
@@ -59,38 +59,38 @@ public class SinglNameReport extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singl_name_report);
 
-        android.support.v7.app.ActionBar actionBar=getSupportActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         //actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.mygradiant));
         //actionBar.setIcon(R.mipmap.ic_launcher_round);
         actionBar.setTitle("إجازاتك");
         //---------------------------------
-        balanceTextView=(TextView)findViewById(R.id.edit_balance);
-        
-        count=(TextView)findViewById(R.id.edit_sum);
-        listView21=(ListView)findViewById(R.id.listview21);
+        balanceTextView = (TextView) findViewById(R.id.edit_balance);
+        balanceTextView.setText(GetBalance());
+        count = (TextView) findViewById(R.id.edit_sum);
+        listView21 = (ListView) findViewById(R.id.listview21);
         shown();
-        sname=(TextView)findViewById(R.id.edit_query);
+        sname = (TextView) findViewById(R.id.edit_query);
         sname.setText(ssnn);
         //--------------search by name and month------------
-        searchButton=(Button)findViewById(R.id.search_button);
+        searchButton = (Button) findViewById(R.id.search_button);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //shownm();
-                final AlertDialog.Builder aDialog =new AlertDialog.Builder(SinglNameReport.this);
-                aDialog.setTitle("البحث خاص لـ              "+ssnn+"       ");
-                View mview=getLayoutInflater().inflate(R.layout.search_layout,null);
+                final AlertDialog.Builder aDialog = new AlertDialog.Builder(SinglNameReport.this);
+                aDialog.setTitle("البحث خاص لـ              " + ssnn + "       ");
+                View mview = getLayoutInflater().inflate(R.layout.search_layout, null);
 
-                monthd=(Spinner)mview.findViewById(R.id.monthsp);
-                ArrayAdapter<String> adapterm =new
+                monthd = (Spinner) mview.findViewById(R.id.monthsp);
+                ArrayAdapter<String> adapterm = new
                         ArrayAdapter<String>(SinglNameReport.this,
                         android.R.layout.simple_spinner_item,
                         getResources().getStringArray(R.array.months));
                 adapterm.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
                 monthd.setAdapter(adapterm);
                 //-------------------------------------
-                vacationd=(Spinner)mview.findViewById(R.id.vacation);
-                ArrayAdapter<String> adapterv =new
+                vacationd = (Spinner) mview.findViewById(R.id.vacation);
+                ArrayAdapter<String> adapterv = new
                         ArrayAdapter<String>(SinglNameReport.this,
                         android.R.layout.simple_spinner_item,
                         getResources().getStringArray(R.array.vacations));
@@ -101,26 +101,27 @@ public class SinglNameReport extends AppCompatActivity {
                 aDialog.setPositiveButton("بحث", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
-                                vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر"))
-                        {
-                            Toast.makeText(getApplicationContext(),"   بالإسم فقط   "+"\n"+"لأنك لم تختر شيء",Toast.LENGTH_SHORT).show();
+                        if (monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
+                                vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر")) {
+                            Toast.makeText(getApplicationContext(), "   بالإسم فقط   " + "\n" + "لأنك لم تختر شيء", Toast.LENGTH_SHORT).show();
                             shown();
                         }
-                        if(!monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
-                                vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر"))
-                        {smonth=(Integer.parseInt(monthd.getSelectedItem().toString())-1)+"";
-                            shownm();}
-                        if(monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
-                                !vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر"))
-                        {svacation=vacationd.getSelectedItem().toString();
-                            shownv();}
-                        if(!monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
-                                !vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر"))
-                        {
-                            smonth=(Integer.parseInt(monthd.getSelectedItem().toString())-1)+"";
-                            svacation=vacationd.getSelectedItem().toString();
-                            shownmv();}
+                        if (!monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
+                                vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر")) {
+                            smonth = (Integer.parseInt(monthd.getSelectedItem().toString()) - 1) + "";
+                            shownm();
+                        }
+                        if (monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
+                                !vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر")) {
+                            svacation = vacationd.getSelectedItem().toString();
+                            shownv();
+                        }
+                        if (!monthd.getSelectedItem().toString().equalsIgnoreCase("إختر") &&
+                                !vacationd.getSelectedItem().toString().equalsIgnoreCase("إختر")) {
+                            smonth = (Integer.parseInt(monthd.getSelectedItem().toString()) - 1) + "";
+                            svacation = vacationd.getSelectedItem().toString();
+                            shownmv();
+                        }
 
                     }
                 });
@@ -133,12 +134,11 @@ public class SinglNameReport extends AppCompatActivity {
                 aDialog.show();
             }
         });
-        excelf=(Button)findViewById(R.id.excelb);
+        excelf = (Button) findViewById(R.id.excelb);
         excelf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                android.support.v7.app.AlertDialog.Builder dialo =new android.support.v7.app.AlertDialog.Builder(SinglNameReport.this);
+                android.support.v7.app.AlertDialog.Builder dialo = new android.support.v7.app.AlertDialog.Builder(SinglNameReport.this);
                 dialo.setTitle("ادخل اسم المف");
                 final EditText input = new EditText(SinglNameReport.this);
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -146,157 +146,169 @@ public class SinglNameReport extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT);
                 input.setLayoutParams(lp);
                 dialo.setView(input);
-
-
                 dialo.setPositiveButton("موافق",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String xn =input.getText().toString();
+                                String xn = input.getText().toString();
                                 all2excel2(xn);
-
                             }
                         }
                 );
                 dialo.show();
             }
         });
-
-
     }
 
-    public void shown(){
-        dbh2=new DBHelper(this);
+    public void shown() {
+        dbh2 = new DBHelper(this);
         vacList = new ArrayList<>();
         Cursor data = dbh2.getnamsearch(ssnn);
         int numRows = data.getCount();
         count.setText("عدد التسجيلات   " + numRows);
-        if (numRows == 0){
-            Toast.makeText(this,"data base is empty",Toast.LENGTH_LONG).show();
+        if (numRows == 0) {
+            Toast.makeText(this, "data base is empty", Toast.LENGTH_LONG).show();
 
-        }else {
-            while (data.moveToNext()){
-                marray = new myArray(data.getString(1),data.getString(2),data.getString(3),data.getString(0));
+        } else {
+            while (data.moveToNext()) {
+                marray = new myArray(data.getString(1), data.getString(2), data.getString(3), data.getString(0));
                 vacList.add(marray);
             }
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
         }
     }
-    public void shownm(){
-        dbh2=new DBHelper(this);
+
+    public void shownm() {
+        dbh2 = new DBHelper(this);
         vacList = new ArrayList<>();
-        Cursor data = dbh2.getnammonthsearch(ssnn,smonth);
+        Cursor data = dbh2.getnammonthsearch(ssnn, smonth);
         int numRows = data.getCount();
         count.setText("عدد التسجيلات   " + numRows);
-        if (numRows == 0){
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+        if (numRows == 0) {
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
-            Toast.makeText(this,"data base is empty",Toast.LENGTH_LONG).show();
-        }else {
-            while (data.moveToNext()){
-                marray = new myArray(data.getString(1),data.getString(2),data.getString(3),data.getString(0));
+            Toast.makeText(this, "data base is empty", Toast.LENGTH_LONG).show();
+        } else {
+            while (data.moveToNext()) {
+                marray = new myArray(data.getString(1), data.getString(2), data.getString(3), data.getString(0));
                 vacList.add(marray);
             }
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
         }
     }
-    public void shownmv(){
-        dbh2=new DBHelper(this);
+
+    public void shownmv() {
+        dbh2 = new DBHelper(this);
         vacList = new ArrayList<>();
-        Cursor data = dbh2.getnammonthvacationsearch(ssnn,smonth,svacation);
+        Cursor data = dbh2.getnammonthvacationsearch(ssnn, smonth, svacation);
         int numRows = data.getCount();
         count.setText("عدد التسجيلات   " + numRows);
-        if (numRows == 0){
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+        if (numRows == 0) {
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
-            Toast.makeText(this,"data base is empty",Toast.LENGTH_LONG).show();
-        }else {
-            while (data.moveToNext()){
-                marray = new myArray(data.getString(1),data.getString(2),data.getString(3),data.getString(0));
+            Toast.makeText(this, "data base is empty", Toast.LENGTH_LONG).show();
+        } else {
+            while (data.moveToNext()) {
+                marray = new myArray(data.getString(1), data.getString(2), data.getString(3), data.getString(0));
                 vacList.add(marray);
             }
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
         }
     }
-    public void shownv(){
-        dbh2=new DBHelper(this);
+
+    public void shownv() {
+        dbh2 = new DBHelper(this);
         vacList = new ArrayList<>();
-        Cursor data = dbh2.getnamvacationsearch(ssnn,svacation);
+        Cursor data = dbh2.getnamvacationsearch(ssnn, svacation);
         int numRows = data.getCount();
         count.setText("عدد التسجيلات   " + numRows);
-        if (numRows == 0){
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+        if (numRows == 0) {
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
-            Toast.makeText(this,"data base is empty",Toast.LENGTH_LONG).show();
-        }else {
-            while (data.moveToNext()){
-                marray = new myArray(data.getString(1),data.getString(2),data.getString(3),data.getString(0));
+            Toast.makeText(this, "data base is empty", Toast.LENGTH_LONG).show();
+        } else {
+            while (data.moveToNext()) {
+                marray = new myArray(data.getString(1), data.getString(2), data.getString(3), data.getString(0));
                 vacList.add(marray);
             }
-            CustomAdapter adapter = new CustomAdapter(this,R.layout.adapter_view_layout,vacList);
-            listView21 = (ListView)findViewById(R.id.listview21);
+            CustomAdapter adapter = new CustomAdapter(this, R.layout.adapter_view_layout, vacList);
+            listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
         }
     }
 
 
-
-     public void all2excel2(String xlsnam){
+    public void all2excel2(String xlsnam) {
 
         File sd = Environment.getExternalStorageDirectory();
-        String csvFile = xlsnam+".xls";
+        String csvFile = xlsnam + ".xls";
         File directory = new File(sd.getAbsolutePath());
         //create directory if not exist
         if (!directory.isDirectory()) {
             directory.mkdirs();
         }
         try {
-
             File file = new File(directory, csvFile);
             WorkbookSettings wbSettings = new WorkbookSettings();
             wbSettings.setLocale(new Locale("en", "EN"));
             WritableWorkbook workbook;
             workbook = Workbook.createWorkbook(file, wbSettings);
-            //Excel sheet name. 0 represents first sheet
             WritableSheet sheet = workbook.createSheet("userList", 0);
-            // column and row
             sheet.addCell(new Label(0, 0, "الاسم"));
             sheet.addCell(new Label(1, 0, "الأجازة"));
             sheet.addCell(new Label(2, 0, "التاريخ"));
             int numRows = listView21.getAdapter().getCount();
 
-
-            for(int i = 0; i < numRows; i++){
+            for (int i = 0; i < numRows; i++) {
                 //exList=userList;
-                myArray aa=vacList.get(i);
-                String name=aa.getName();
-                String vac=aa.getVac();
-                String dat=aa.getDate();
-                sheet.addCell(new Label(0, i+1, name));
-                sheet.addCell(new Label(1, i+1, vac));
-                sheet.addCell(new Label(2, i+1, dat));
+                myArray aa = vacList.get(i);
+                String name = aa.getName();
+                String vac = aa.getVac();
+                String dat = aa.getDate();
+                sheet.addCell(new Label(0, i + 1, name));
+                sheet.addCell(new Label(1, i + 1, vac));
+                sheet.addCell(new Label(2, i + 1, dat));
             }
 
             workbook.write();
             workbook.close();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-
     public void balance(View view) {
-        BalanceInsertDialog balanceInsertDialog=new BalanceInsertDialog();
-        balanceInsertDialog.show(getSupportFragmentManager(),"bbb");
+        BalanceInsertDialog balanceInsertDialog = new BalanceInsertDialog();
+        balanceInsertDialog.show(getSupportFragmentManager(), "bbb");
+    }
+
+    public String GetBalance() {
+        dbh2=new DBHelper(this);
+        int used_o = dbh2.getnamvacationsearch(ssnn,"أعتيادي").getCount();
+        int used_s = dbh2.getnamvacationsearch(ssnn,"عارضة").getCount();
+        Cursor data = dbh2.getBalance(ssnn);
+        int o, s;
+        if (data.moveToFirst()) {
+            o = Integer.parseInt(data.getString(data.getColumnIndex("ordinary")));
+            s = Integer.parseInt(data.getString(data.getColumnIndex("sudden")));
+            return "المتبقي من الرصيد\n"+ "الأعتيادي " + (o-used_o) + "\n العارضة " + (s-used_s);
+        } else {
+            return "لم يضاف رصيد بعد";
+        }
+
+
+    }
+    public void refresh(View view){
+        balanceTextView.setText(GetBalance());
     }
 }

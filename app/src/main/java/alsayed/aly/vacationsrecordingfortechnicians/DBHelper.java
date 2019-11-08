@@ -56,13 +56,14 @@ public class DBHelper extends SQLiteOpenHelper {
     //-------------vacationsBalance--------------
     //---------insert----
     public boolean insertVacationsBalance (String p_name,int ordinary,int sudden){
-        SQLiteDatabase dp=this.getWritableDatabase();
+        SQLiteDatabase db=this.getWritableDatabase();
+        //db.execSQL("CREATE TABLE IF  NOT EXISTS vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
         ContentValues contentValues=new ContentValues();
         contentValues.put("p_name",p_name);
         contentValues.put("ordinary",ordinary);
         contentValues.put("sudden",sudden);
 
-        dp.insert("vacations_balance",null,contentValues);
+        db.insert("vacations_balance",null,contentValues);
         return true;
     }
     //----------update-----
@@ -70,7 +71,6 @@ public class DBHelper extends SQLiteOpenHelper {
     {
         SQLiteDatabase db=this.getWritableDatabase();
         ContentValues contentValues=new ContentValues();
-        contentValues.put("p_name",p_name);
         contentValues.put("ordinary",ordinary);
         contentValues.put("sudden",sudden);
         db.update("vacations_balance",contentValues,"p_name = ?",new String[]{p_name});
