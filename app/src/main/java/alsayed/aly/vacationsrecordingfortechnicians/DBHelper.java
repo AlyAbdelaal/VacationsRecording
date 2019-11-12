@@ -22,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String VACATION="vacation";
     public static final String VACATIONSNAMES="settings";
 
+    public String selectedYear = MainActivity.SHOW_YEAR;
 
 
     public DBHelper(Context context){
@@ -32,7 +33,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table vacations (id integer primary key AUTOINCREMENT,name text ,vacation text,date text,MONTH text)");
+        db.execSQL("create table vacations (id integer primary key AUTOINCREMENT,name text ,vacation text,date text,MONTH text,year text)");
         db.execSQL("create table o_vacations (id integer primary key ,name text ,vacation text,date text,MONTH text)");
         db.execSQL("create table settings (vid integer primary key AUTOINCREMENT,vname text)");
 
@@ -52,6 +53,7 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("vacation",vacation);
         contentValues.put("date",date);
         contentValues.put("month",month);
+        //contentValues.put("year",year);
         dp.insert("vacations",null,contentValues);
         return true;
     }
@@ -102,22 +104,23 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getnamsearch(String ns){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? ORDER BY NAME, MONTH , date ",new String[]{ns});
+        //حل مشكلة السنة من قراءة السنة من التاريخ وعرض سنة محددة
+        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND year = ?  ORDER BY NAME, MONTH , date ",new String[]{ns,selectedYear});
         return data;
     }
     public Cursor getnammonthsearch(String ns,String month){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? ORDER BY date ",new String[]{ns,month});
+        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND MONTH = ? AND year = ? ORDER BY date ",new String[]{ns,month,selectedYear});
         return data;
     }
     public Cursor getnamvacationsearch(String ns,String vacation){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND VACATION = ? ORDER BY MONTH ,date",new String[]{ns,vacation});
+        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND VACATION = ? AND year = ? ORDER BY MONTH ,date",new String[]{ns,vacation,selectedYear});
         return data;
     }
     public Cursor getnammonthvacationsearch(String ns,String month,String vacation){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND VACATION =? ORDER BY date",new String[]{ns,month,vacation});
+        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND MONTH = ? AND VACATION =? AND year = ? ORDER BY date",new String[]{ns,month,vacation,selectedYear});
         return data;
     }
 /*
@@ -129,7 +132,7 @@ public class DBHelper extends SQLiteOpenHelper {
     */
     public Cursor getlistrecored(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("SELECT * FROM vacations ORDER BY NAME ,MONTH , date ",null);
+        Cursor data = ddbb.rawQuery("SELECT * ,substr(date,11,4) AS year FROM vacations WHERE year = ? ORDER BY NAME ,MONTH , date ",new String[]{selectedYear});
         return data;
     }
 
@@ -137,12 +140,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public Cursor getmoth(int id){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data =ddbb.rawQuery("select * from vacations where ID = ?",new String[]{Integer.toString(id)});
+        Cursor data =ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where ID = ? AND year = ?",new String[]{Integer.toString(id),selectedYear});
         return data;
     }
     public ArrayList<String> getoldnames(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data =ddbb.rawQuery("select * from vacations ORDER BY NAME ",null);
+        Cursor data =ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations ORDER BY NAME ",null);
         ArrayList<String> oldnames=new ArrayList<String>();
         while (data.moveToNext() ) {
             oldnames.add(data.getString(1));
@@ -155,7 +158,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList arrayListch=new ArrayList();
         SQLiteDatabase db =this.getReadableDatabase();
         //String[]params=new String[]{ns,mon};
-        Cursor res=db.rawQuery("select * from vacations where NAME = ? AND DATE = ? AND VACATION =?",new String[]{ns,dat,vac});
+        Cursor res=db.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND DATE = ? AND VACATION =?",new String[]{ns,dat,vac});
         res.moveToFirst();
         while(res.isAfterLast()==false){
             arrayListch.add(res.getString(res.getColumnIndex(ID)));
@@ -171,7 +174,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList arrayListch=new ArrayList();
         SQLiteDatabase db =this.getReadableDatabase();
         //String[]params=new String[]{ns,mon};
-        Cursor res=db.rawQuery("select * from vacations where NAME = ? AND DATE = ? AND VACATION =?",new String[]{ns,dat,vac});
+        Cursor res=db.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND DATE = ? AND VACATION =?",new String[]{ns,dat,vac});
         res.moveToFirst();
         if(res.getCount()>0){
             res.close();
@@ -181,6 +184,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }else{return false;}
 
     }
+    /*
     public boolean insertToOld (){
 
         //Cursor data = db.rawQuery("SELECT * FROM o_vacation",null);
@@ -212,6 +216,6 @@ public class DBHelper extends SQLiteOpenHelper {
         }else{return "0";}
     }
 
-
+*/
 
 }

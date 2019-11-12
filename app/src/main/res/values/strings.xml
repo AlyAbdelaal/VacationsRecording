@@ -30,4 +30,9 @@
         <item>11</item>
         <item>12</item>
     </string-array>
+    <string-array name="years">
+        <item>السنة الحالية</item>
+        <item>السنة القادمة</item>
+        <item>السنة الماضية</item>
+    </string-array>
 </resources>

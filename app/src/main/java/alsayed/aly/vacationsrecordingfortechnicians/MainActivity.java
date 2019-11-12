@@ -11,10 +11,16 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import hotchemi.android.rate.AppRate;
@@ -25,8 +31,10 @@ public class MainActivity extends AppCompatActivity {
     Button addrecord;
     Button allrecords;
     TextView oldn;
+    Spinner yearSpinner;
+    static String SHOW_YEAR;
     static boolean showDialog=true;
-
+    static int pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,15 +70,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         Calendar calendar=Calendar.getInstance();
         int c_Year = calendar.get(Calendar.YEAR);
         int r_year=Integer.parseInt(new DBHelper(this).recordYear());
         Toast.makeText(this,r_year+"",Toast.LENGTH_SHORT).show();
-        if (c_Year!=r_year){detectNewYear();}
+        //if (c_Year!=r_year){detectNewYear();}*/
+
+        yearSpinner=(Spinner) findViewById(R.id.year_spinner);
+        final ArrayAdapter<CharSequence> adapter =ArrayAdapter.createFromResource(this,R.array.years,android.R.layout.simple_spinner_item);
+        yearSpinner.setAdapter(adapter);
+        yearSpinner.setSelection(pos);
+        onYearSelected(yearSpinner);
+    }
+    public void onYearSelected(final Spinner spinner){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Calendar calendar=Calendar.getInstance();
+                int c_Year = calendar.get(Calendar.YEAR);
+                String sy=parent.getItemAtPosition(position).toString();
+                switch (sy){
+                    case "السنة الحالية":
+                        SHOW_YEAR=c_Year+""; pos = position;
+                        break;
+                    case "السنة القادمة":
+                        SHOW_YEAR=(c_Year+1)+"";pos = position;
+                        break;
+                    case "السنة الماضية":
+                        SHOW_YEAR=(c_Year-1)+"";pos = position;
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
+
     private void detectNewYear() {
-        new DBHelper(this).insertToOld();
+       /* new DBHelper(this).insertToOld();
         new AlertDialog.Builder(this)
                 .setTitle(" السنة الجديدة "  )
                 .setMessage( "تم الآن تنظيف السجلات بمناسبة حلول السنة الجديدة ")
@@ -81,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                .show();*/
     }
 
     public void openAddActivity(){

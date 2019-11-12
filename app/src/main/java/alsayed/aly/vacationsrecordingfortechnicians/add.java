@@ -245,6 +245,18 @@ public class add extends AppCompatActivity implements AdapterView.OnItemSelected
         String dd = d +" /"+m+" /"+y;
         return m+"";
     }
+    public String year (int i){
+        SimpleDateFormat sdf =new SimpleDateFormat("dd / MM / yyyy");
+
+        Calendar calendar=new GregorianCalendar(dyear,dmonth,dday) ;
+        calendar.add(Calendar.DAY_OF_MONTH,i);
+        int d=calendar.get(Calendar.DAY_OF_MONTH);
+        int m=calendar.get(Calendar.MONTH);
+        int y=calendar.get(Calendar.YEAR);
+
+        String dd = d +" /"+m+" /"+y;
+        return y+"";
+    }
 
 
 
