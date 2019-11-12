@@ -37,6 +37,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table o_vacations (id integer primary key ,name text ,vacation text,date text,MONTH text)");
         db.execSQL("create table settings (vid integer primary key AUTOINCREMENT,vname text)");
 
+        db.execSQL("create table vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
+
         db.execSQL("INSERT INTO settings (vname) VALUES ('أعتيادي'),('عارضة'),('بدل راحة'),('إعتذار عن يوم'),('إعتذار عن الوقت الإضافي'),('إعتذار سفن'),('إذن شخصي'),('إذن تأخير'),('مرضي'),('مأمورية رسمية'),('مأمورية عيادة')");
     }
 
@@ -57,6 +59,36 @@ public class DBHelper extends SQLiteOpenHelper {
         dp.insert("vacations",null,contentValues);
         return true;
     }
+    //-------------vacationsBalance--------------
+    //---------insert----
+    public boolean insertVacationsBalance (String p_name,int ordinary,int sudden){
+        SQLiteDatabase db=this.getWritableDatabase();
+        //db.execSQL("CREATE TABLE IF  NOT EXISTS vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("p_name",p_name);
+        contentValues.put("ordinary",ordinary);
+        contentValues.put("sudden",sudden);
+
+        db.insert("vacations_balance",null,contentValues);
+        return true;
+    }
+    //----------update-----
+    public boolean updateBalance (String p_name,int ordinary,int sudden)
+    {
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues contentValues=new ContentValues();
+        contentValues.put("ordinary",ordinary);
+        contentValues.put("sudden",sudden);
+        db.update("vacations_balance",contentValues,"p_name = ?",new String[]{p_name});
+        return true;
+    }
+    //----------getBalance---
+    public Cursor getBalance(String p_name){
+        SQLiteDatabase ddbb = this.getReadableDatabase();
+        Cursor data = ddbb.rawQuery("SELECT * FROM vacations_balance WHERE p_name = ? ",new String[]{p_name});
+        return data;
+    }
+
     //---------------------------------------------
     public Integer deleteVacationType (String dn)
     {
