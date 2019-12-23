@@ -92,15 +92,18 @@ public class MainActivity extends AppCompatActivity {
                 String sy=parent.getItemAtPosition(position).toString();
                 switch (sy){
                     case "السنة الحالية":
-                        SHOW_YEAR=c_Year+""; pos = position;
+                        SHOW_YEAR=Integer.toString(c_Year); pos = position;
                         break;
                     case "السنة القادمة":
-                        SHOW_YEAR=(c_Year+1)+"";pos = position;
+                        SHOW_YEAR=Integer.toString(c_Year+1);pos = position;
                         break;
                     case "السنة الماضية":
-                        SHOW_YEAR=(c_Year-1)+"";pos = position;
+                        SHOW_YEAR=Integer.toString(c_Year-1);pos = position;
                         break;
                 }
+                Toast.makeText(MainActivity.this,SHOW_YEAR+":"+new DBHelper(MainActivity.this).showMeyearDate(),Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
@@ -111,20 +114,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void detectNewYear() {
-       /* new DBHelper(this).insertToOld();
-        new AlertDialog.Builder(this)
-                .setTitle(" السنة الجديدة "  )
-                .setMessage( "تم الآن تنظيف السجلات بمناسبة حلول السنة الجديدة ")
-                .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        showDialog=false;
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();*/
-    }
 
     public void openAddActivity(){
         Intent intent=new Intent(this,add.class);

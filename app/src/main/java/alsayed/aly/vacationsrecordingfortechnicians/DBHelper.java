@@ -22,8 +22,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String VACATION="vacation";
     public static final String VACATIONSNAMES="settings";
 
-    public String selectedYear = MainActivity.SHOW_YEAR;
+    public static String selectedYear = MainActivity.SHOW_YEAR;
 
+    public void setSelectedYear(String selectedYear) {
+        this.selectedYear = selectedYear;
+    }
 
     public DBHelper(Context context){
         super(context,DATABASE_NAME,null,1);
@@ -137,22 +140,24 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getnamsearch(String ns){
         SQLiteDatabase ddbb = this.getReadableDatabase();
         //حل مشكلة السنة من قراءة السنة من التاريخ وعرض سنة محددة
-        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND year = ?  ORDER BY NAME, MONTH , date ",new String[]{ns,selectedYear});
+        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND substr(date,11,4) = ?  ORDER BY NAME, MONTH , date ",new String[]{ns,MainActivity.SHOW_YEAR});
+
         return data;
     }
+
     public Cursor getnammonthsearch(String ns,String month){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND MONTH = ? AND year = ? ORDER BY date ",new String[]{ns,month,selectedYear});
+        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND substr(date,11,4) = ? ORDER BY date ",new String[]{ns,month,MainActivity.SHOW_YEAR});
         return data;
     }
     public Cursor getnamvacationsearch(String ns,String vacation){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND VACATION = ? AND year = ? ORDER BY MONTH ,date",new String[]{ns,vacation,selectedYear});
+        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND VACATION = ? AND substr(date,11,4) = ? ORDER BY MONTH ,date",new String[]{ns,vacation,MainActivity.SHOW_YEAR});
         return data;
     }
     public Cursor getnammonthvacationsearch(String ns,String month,String vacation){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND MONTH = ? AND VACATION =? AND year = ? ORDER BY date",new String[]{ns,month,vacation,selectedYear});
+        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND VACATION =? AND substr(date,11,4) = ? ORDER BY date",new String[]{ns,month,vacation,MainActivity.SHOW_YEAR});
         return data;
     }
 /*
@@ -164,20 +169,28 @@ public class DBHelper extends SQLiteOpenHelper {
     */
     public Cursor getlistrecored(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("SELECT * ,substr(date,11,4) AS year FROM vacations WHERE year = ? ORDER BY NAME ,MONTH , date ",new String[]{selectedYear});
+        Cursor data = ddbb.rawQuery("SELECT * FROM vacations where  substr(date,11,4) = ?  ORDER BY NAME ,MONTH , date ",new String[]{MainActivity.SHOW_YEAR});
         return data;
     }
-
+    public String showMeyearDate(){
+        SQLiteDatabase ddbb = this.getReadableDatabase();
+        Cursor data = ddbb.rawQuery("SELECT substr(date,11,4) AS year FROM vacations Limit 1 ",null);
+        ArrayList<String> allY=new ArrayList<>();
+        while (data.moveToNext() ) {
+            allY.add(data.getString(0));
+        }
+        return allY.get(0);
+    }
 
 
     public Cursor getmoth(int id){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data =ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations where ID = ? AND year = ?",new String[]{Integer.toString(id),selectedYear});
+        Cursor data =ddbb.rawQuery("select * from vacations where ID = ? AND substr(date,11,4) = ?",new String[]{Integer.toString(id),MainActivity.SHOW_YEAR});
         return data;
     }
     public ArrayList<String> getoldnames(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data =ddbb.rawQuery("select * ,substr(date,11,4) AS year from vacations ORDER BY NAME ",null);
+        Cursor data =ddbb.rawQuery("select * from vacations ORDER BY NAME ",null);
         ArrayList<String> oldnames=new ArrayList<String>();
         while (data.moveToNext() ) {
             oldnames.add(data.getString(1));
@@ -190,7 +203,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList arrayListch=new ArrayList();
         SQLiteDatabase db =this.getReadableDatabase();
         //String[]params=new String[]{ns,mon};
-        Cursor res=db.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND DATE = ? AND VACATION =?",new String[]{ns,dat,vac});
+        Cursor res=db.rawQuery("select * from vacations where NAME = ? AND DATE = ? AND VACATION =? AND substr(date,11,4) = ?",new String[]{ns,dat,vac,MainActivity.SHOW_YEAR});
         res.moveToFirst();
         while(res.isAfterLast()==false){
             arrayListch.add(res.getString(res.getColumnIndex(ID)));
@@ -206,7 +219,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList arrayListch=new ArrayList();
         SQLiteDatabase db =this.getReadableDatabase();
         //String[]params=new String[]{ns,mon};
-        Cursor res=db.rawQuery("select * ,substr(date,11,4) AS year from vacations where NAME = ? AND DATE = ? AND VACATION =?",new String[]{ns,dat,vac});
+        Cursor res=db.rawQuery("select * from vacations where NAME = ? AND DATE = ? AND VACATION =? AND substr(date,11,4) = ? ",new String[]{ns,dat,vac,MainActivity.SHOW_YEAR});
         res.moveToFirst();
         if(res.getCount()>0){
             res.close();

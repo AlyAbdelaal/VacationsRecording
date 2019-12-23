@@ -226,6 +226,7 @@ ArrayList<myArray> vacList;
             Toast.makeText(this," قاعدة البيانات فارغة ",Toast.LENGTH_LONG).show();
         }else {
             while (data.moveToNext()) {
+                //Toast.makeText(this,'"'+data.getString(data.getColumnIndex("year"))+"/"+MainActivity.SHOW_YEAR+'"',Toast.LENGTH_LONG).show();
                 marray = new myArray(data.getString(1), data.getString(2), data.getString(3), data.getString(0));
                 vacList.add(marray);
 

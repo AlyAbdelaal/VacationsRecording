@@ -66,10 +66,12 @@ public class BalanceInsertDialog extends AppCompatDialogFragment {
         int o = Integer.parseInt(ordinary);
         int s = Integer.parseInt(sudden);
         DBHelper db =new DBHelper(getActivity());
+        SinglNameReport singlNameReport=new SinglNameReport();
         if (db.getBalance(SinglNameReport.ssnn).getCount()==0) {
             db.insertVacationsBalance(SinglNameReport.ssnn, o, s);
         }else{db.updateBalance(SinglNameReport.ssnn,o,s);}
         //SinglNameReport.balanceTextView.setText(new SinglNameReport().GetBalance());
+        //SinglNameReport.balanceTextView.setText(singlNameReport.GetBalance());
         dismiss();
     }
 }

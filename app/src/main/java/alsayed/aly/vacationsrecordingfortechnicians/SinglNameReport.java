@@ -171,6 +171,7 @@ public class SinglNameReport extends AppCompatActivity {
 
         } else {
             while (data.moveToNext()) {
+
                 marray = new myArray(data.getString(1), data.getString(2), data.getString(3), data.getString(0));
                 vacList.add(marray);
             }
@@ -178,6 +179,9 @@ public class SinglNameReport extends AppCompatActivity {
             listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
         }
+        //Toast.makeText(this,MainActivity.SHOW_YEAR,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,new DBHelper(this).test(),Toast.LENGTH_LONG).show();
+
     }
 
     public void shownm() {
@@ -200,6 +204,7 @@ public class SinglNameReport extends AppCompatActivity {
             listView21 = (ListView) findViewById(R.id.listview21);
             listView21.setAdapter(adapter);
         }
+
     }
 
     public void shownmv() {
