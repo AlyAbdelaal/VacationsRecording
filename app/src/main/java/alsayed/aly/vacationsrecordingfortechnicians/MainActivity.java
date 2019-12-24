@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         actionBar.setTitle("إجازاتك");
-        AppRate.with(this).setInstallDays(0)
-                .setLaunchTimes(2).setRemindInterval(1).monitor();
+        AppRate.with(this).setInstallDays(2)
+                .setLaunchTimes(10).setRemindInterval(10).monitor();
         AppRate.showRateDialogIfMeetsConditions(this);
 
         addrecord=(Button)findViewById(R.id.addrecord);
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                         SHOW_YEAR=Integer.toString(c_Year-1);pos = position;
                         break;
                 }
-                Toast.makeText(MainActivity.this,SHOW_YEAR+":"+new DBHelper(MainActivity.this).showMeyearDate(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,SHOW_YEAR+":"+new DBHelper(MainActivity.this).showMeyearDate(),Toast.LENGTH_SHORT).show();
 
 
             }

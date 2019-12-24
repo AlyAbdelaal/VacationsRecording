@@ -48,10 +48,11 @@ public class AllOldNames extends AppCompatActivity {
 
     public void setoldnamesadabter(){
 
-        if(dbh.getoldnames().size()!=0) {
+        if(dbh.getoldnames()!=null) {
             oldNames = removeDuplicates(dbh.getoldnames());
         }else{
-            Toast.makeText(this," قاعدة البيانات فارغة ",Toast.LENGTH_LONG).show();}
+            Toast.makeText(this," قاعدة البيانات فارغة ",Toast.LENGTH_LONG).show();
+        }
         ArrayAdapter<String> namesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, oldNames);
         old_nams_listView.setAdapter(namesAdapter);
     }

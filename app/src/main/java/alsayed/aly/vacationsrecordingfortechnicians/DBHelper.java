@@ -3,6 +3,7 @@ package alsayed.aly.vacationsrecordingfortechnicians;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -36,13 +37,18 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        db.execSQL("create table vacations (id integer primary key AUTOINCREMENT,name text ,vacation text,date text,MONTH text,year text)");
-        db.execSQL("create table o_vacations (id integer primary key ,name text ,vacation text,date text,MONTH text)");
-        db.execSQL("create table settings (vid integer primary key AUTOINCREMENT,vname text)");
+        try {
+            db.execSQL("create table vacations (id integer primary key AUTOINCREMENT,name text ,vacation text,date text,MONTH text,year text)");
+            db.execSQL("create table o_vacations (id integer primary key ,name text ,vacation text,date text,MONTH text)");
+            db.execSQL("create table settings (vid integer primary key AUTOINCREMENT,vname text)");
 
-        db.execSQL("create table vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
+            db.execSQL("create table vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
 
-        db.execSQL("INSERT INTO settings (vname) VALUES ('أعتيادي'),('عارضة'),('بدل راحة'),('إعتذار عن يوم'),('إعتذار عن الوقت الإضافي'),('إعتذار سفن'),('إذن شخصي'),('إذن تأخير'),('مرضي'),('مأمورية رسمية'),('مأمورية عيادة')");
+            db.execSQL("INSERT INTO settings (vname) VALUES ('أعتيادي'),('عارضة'),('بدل راحة'),('إعتذار عن يوم'),('إعتذار عن الوقت الإضافي'),('إعتذار سفن'),('إذن شخصي'),('إذن تأخير'),('مرضي'),('مأمورية رسمية'),('مأمورية عيادة')");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -52,51 +58,83 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
     public boolean insertvacation (String name,String vacation,String date,String month){
-        SQLiteDatabase dp=this.getWritableDatabase();
-        ContentValues contentValues=new ContentValues();
-        contentValues.put("name",name);
-        contentValues.put("vacation",vacation);
-        contentValues.put("date",date);
-        contentValues.put("month",month);
-        //contentValues.put("year",year);
-        dp.insert("vacations",null,contentValues);
+
+        try {
+            SQLiteDatabase dp=this.getWritableDatabase();
+            ContentValues contentValues=new ContentValues();
+            contentValues.put("name",name);
+            contentValues.put("vacation",vacation);
+            contentValues.put("date",date);
+            contentValues.put("month",month);
+            //contentValues.put("year",year);
+            dp.insert("vacations",null,contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return true;
     }
     //-------------vacationsBalance--------------
     //---------insert----
     public boolean insertVacationsBalance (String p_name,int ordinary,int sudden){
-        SQLiteDatabase db=this.getWritableDatabase();
-        //db.execSQL("CREATE TABLE IF  NOT EXISTS vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
-        ContentValues contentValues=new ContentValues();
-        contentValues.put("p_name",p_name);
-        contentValues.put("ordinary",ordinary);
-        contentValues.put("sudden",sudden);
 
-        db.insert("vacations_balance",null,contentValues);
+        try {
+            SQLiteDatabase db=this.getWritableDatabase();
+            //db.execSQL("CREATE TABLE IF  NOT EXISTS vacations_balance (p_id integer primary key AUTOINCREMENT,p_name text,ordinary int,sudden int)");
+            ContentValues contentValues=new ContentValues();
+            contentValues.put("p_name",p_name);
+            contentValues.put("ordinary",ordinary);
+            contentValues.put("sudden",sudden);
+
+            db.insert("vacations_balance",null,contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return true;
     }
     //----------update-----
     public boolean updateBalance (String p_name,int ordinary,int sudden)
     {
-        SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues contentValues=new ContentValues();
-        contentValues.put("ordinary",ordinary);
-        contentValues.put("sudden",sudden);
-        db.update("vacations_balance",contentValues,"p_name = ?",new String[]{p_name});
+        try {
+            SQLiteDatabase db=this.getWritableDatabase();
+            ContentValues contentValues=new ContentValues();
+            contentValues.put("ordinary",ordinary);
+            contentValues.put("sudden",sudden);
+            db.update("vacations_balance",contentValues,"p_name = ?",new String[]{p_name});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         return true;
     }
     //----------getBalance---
     public Cursor getBalance(String p_name){
+
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("SELECT * FROM vacations_balance WHERE p_name = ? ",new String[]{p_name});
+
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("SELECT * FROM vacations_balance WHERE p_name = ? ",new String[]{p_name});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return data;
     }
 
     //---------------------------------------------
     public Integer deleteVacationType (String dn)
     {
-        SQLiteDatabase db=this.getWritableDatabase();
-        return db.delete("settings","vname = ?",new String[]{dn});
+        Integer i = null;
+        try {
+            SQLiteDatabase db=this.getWritableDatabase();
+            i= db.delete("settings","vname = ?",new String[]{dn});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return i;
     }
     public boolean insertNewVacation (String vName){
         SQLiteDatabase dp=this.getWritableDatabase();
@@ -108,7 +146,12 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<String> getVacationsNames(){
         ArrayList<String>vn=new ArrayList<String>();
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from settings ",null);
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("select * from settings ",null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         while (data.moveToNext()){
             vn.add(data.getString(1));
         }
@@ -140,24 +183,44 @@ public class DBHelper extends SQLiteOpenHelper {
     public Cursor getnamsearch(String ns){
         SQLiteDatabase ddbb = this.getReadableDatabase();
         //حل مشكلة السنة من قراءة السنة من التاريخ وعرض سنة محددة
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND substr(date,11,4) = ?  ORDER BY NAME, MONTH , date ",new String[]{ns,MainActivity.SHOW_YEAR});
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("select * from vacations where NAME = ? AND substr(date,11,4) = ?  ORDER BY NAME, MONTH , date ",new String[]{ns, MainActivity.SHOW_YEAR});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return data;
     }
 
     public Cursor getnammonthsearch(String ns,String month){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND substr(date,11,4) = ? ORDER BY date ",new String[]{ns,month,MainActivity.SHOW_YEAR});
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND substr(date,11,4) = ? ORDER BY date ",new String[]{ns,month, MainActivity.SHOW_YEAR});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return data;
     }
     public Cursor getnamvacationsearch(String ns,String vacation){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND VACATION = ? AND substr(date,11,4) = ? ORDER BY MONTH ,date",new String[]{ns,vacation,MainActivity.SHOW_YEAR});
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("select * from vacations where NAME = ? AND VACATION = ? AND substr(date,11,4) = ? ORDER BY MONTH ,date",new String[]{ns,vacation, MainActivity.SHOW_YEAR});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return data;
     }
     public Cursor getnammonthvacationsearch(String ns,String month,String vacation){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND VACATION =? AND substr(date,11,4) = ? ORDER BY date",new String[]{ns,month,vacation,MainActivity.SHOW_YEAR});
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("select * from vacations where NAME = ? AND MONTH = ? AND VACATION =? AND substr(date,11,4) = ? ORDER BY date",new String[]{ns,month,vacation, MainActivity.SHOW_YEAR});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return data;
     }
 /*
@@ -169,12 +232,22 @@ public class DBHelper extends SQLiteOpenHelper {
     */
     public Cursor getlistrecored(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("SELECT * FROM vacations where  substr(date,11,4) = ?  ORDER BY NAME ,MONTH , date ",new String[]{MainActivity.SHOW_YEAR});
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("SELECT * FROM vacations where  substr(date,11,4) = ?  ORDER BY NAME ,MONTH , date ",new String[]{MainActivity.SHOW_YEAR});
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return data;
     }
     public String showMeyearDate(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data = ddbb.rawQuery("SELECT substr(date,11,4) AS year FROM vacations Limit 1 ",null);
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("SELECT substr(date,11,4) AS year FROM vacations Limit 1 ",null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ArrayList<String> allY=new ArrayList<>();
         while (data.moveToNext() ) {
             allY.add(data.getString(0));
@@ -190,7 +263,12 @@ public class DBHelper extends SQLiteOpenHelper {
     }
     public ArrayList<String> getoldnames(){
         SQLiteDatabase ddbb = this.getReadableDatabase();
-        Cursor data =ddbb.rawQuery("select * from vacations ORDER BY NAME ",null);
+        Cursor data = null;
+        try {
+            data = ddbb.rawQuery("select * from vacations ORDER BY NAME ",null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ArrayList<String> oldnames=new ArrayList<String>();
         while (data.moveToNext() ) {
             oldnames.add(data.getString(1));
